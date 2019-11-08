@@ -13,7 +13,7 @@ def Main():
         (0, 255, 0),
         (0, 0, 255),
     ]
-    BackgroundIndex = 0
+    BackgroundIndex = 0;
     while True:
 
         for event in pygame.event.get():
