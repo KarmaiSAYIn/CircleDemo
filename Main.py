@@ -13,7 +13,7 @@ def Main():
         (0, 255, 0),
         (0, 0, 255),
     ]
-    BackgroundIndex = 0;
+    BackgroundIndex = 0
     while True:
 
         for event in pygame.event.get():
@@ -21,13 +21,21 @@ def Main():
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
+
                 if event.key == pygame.K_UP:
                     BackgroundIndex += 1
 
                 if event.key == pygame.K_DOWN:
                     BackgroundIndex -= 1
 
-        screen.fill(Backgrounds[BackgroundIndex])
+                if event.key == pygame.K_ESCAPE:
+                    sys.exit()
+
+        try:
+            screen.fill(Backgrounds[BackgroundIndex])
+        except IndexError:
+            BackgroundIndex = 1
         pygame.display.flip()
+
 
 Main()
