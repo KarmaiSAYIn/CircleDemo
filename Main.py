@@ -7,12 +7,13 @@ def Main():
     screen = pygame.display.set_mode((1200, 800))
     pygame.display.set_caption("School")
 
-    Backgrounds = [
+    Backgrounds = (
         (0, 0, 0),
         (255, 0, 0),
         (0, 255, 0),
         (0, 0, 255),
-    ]
+    )
+
     BackgroundIndex = 0;
     while True:
 
@@ -24,8 +25,14 @@ def Main():
                 if event.key == pygame.K_UP:
                     BackgroundIndex += 1
 
+                    if BackgroundIndex >= len(Backgrounds):
+                        BackgroundIndex = 0
+
                 if event.key == pygame.K_DOWN:
                     BackgroundIndex -= 1
+
+                    if BackgroundIndex < 0:
+                        BackgroundIndex = len(Backgrounds) - 1
 
         screen.fill(Backgrounds[BackgroundIndex])
         pygame.display.flip()
