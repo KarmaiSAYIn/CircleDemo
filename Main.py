@@ -3,7 +3,7 @@ from time import time
 
 import pygame
 
-from DynamicObjects import DynamicObject
+from DynamicObjects import DynamicObject, Circle
 from Vec2 import Vec2
 
 class Game:
@@ -21,7 +21,8 @@ class Game:
         )
 
         self.BackgroundIndex = 0
-        self.Rectangle = DynamicObject(Vec2(0, 0), 100, 100, Vec2(1, 1), (255, 255, 255), self.Screen, self.ScreenRect)
+        self.Circle0 = Circle(Vec2(400, 400), 50, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
+        self.Circle1 = Circle(Vec2(600, 400), 50, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
 
         self.fStartingTime = time()
         while True:
@@ -37,10 +38,17 @@ class Game:
                 elif event.type == pygame.KEYUP:
                     self.KeyupEvents(event)
 
-            self.Rectangle.Update(self.fElapsedTime)
+            self.Circle0.Update(self.fElapsedTime)
+            self.Circle0.ClampToScreen()
+
+            if self.Circle0.CheckCircleCollision(self.Circle1):
+                self.Circle0.Color = (255, 0, 0)
+            else:
+                self.Circle0.Color = (255, 255, 255)
 
             self.Screen.fill(self.Backgrounds[self.BackgroundIndex])
-            self.Rectangle.Draw()
+            self.Circle1.Draw()
+            self.Circle0.Draw()
             pygame.display.flip()
 
     def KeydownEvents(self, event):
@@ -57,28 +65,28 @@ class Game:
                 self.BackgroundIndex = len(self.Backgrounds) - 1
 
         if event.key == pygame.K_LEFT:
-            self.Rectangle.MovingLeft = True
+            self.Circle0.MovingLeft = True
 
         if event.key == pygame.K_RIGHT:
-            self.Rectangle.MovingRight = True
+            self.Circle0.MovingRight = True
 
         if event.key == pygame.K_UP:
-            self.Rectangle.MovingUp = True
+            self.Circle0.MovingUp = True
 
         if event.key == pygame.K_DOWN:
-            self.Rectangle.MovingDown = True
+            self.Circle0.MovingDown = True
 
     def KeyupEvents(self, event):
         if event.key == pygame.K_LEFT:
-            self.Rectangle.MovingLeft = False
+            self.Circle0.MovingLeft = False
 
         if event.key == pygame.K_RIGHT:
-            self.Rectangle.MovingRight = False
+            self.Circle0.MovingRight = False
 
         if event.key == pygame.K_UP:
-            self.Rectangle.MovingUp = False
+            self.Circle0.MovingUp = False
 
         if event.key == pygame.K_DOWN:
-            self.Rectangle.MovingDown = False
+            self.Circle0.MovingDown = False
 
-Game()
+game = Game()
