@@ -3,8 +3,10 @@ import pygame
 from Vec2 import Vec2
 
 class DynamicObject:
-    def __init__(self, InitRect, InitVelocity, InitColor, Screen, ScreenRect):
-        self.Rect = InitRect
+    def __init__(self, InitPos, InitWidth, InitHeight, InitVelocity, InitColor, Screen, ScreenRect):
+        self.Pos = InitPos
+        self.Width = InitWidth
+        self.Height = InitHeight
         self.Velocity = InitVelocity
         self.Color = InitColor
         self.Screen = Screen
@@ -17,29 +19,29 @@ class DynamicObject:
 
     def Update(self, fElapsedTime):
         if self.MovingLeft:
-            self.Rect.x -= self.Velocity.x * fElapsedTime
+            self.Pos.x -= self.Velocity.x * fElapsedTime
 
         if self.MovingRight:
-            self.Rect.x += self.Velocity.x * fElapsedTime
+            self.Pos.x += self.Velocity.x * fElapsedTime
 
         if self.MovingUp:
-            self.Rect.y -= self.Velocity.y * fElapsedTime
+            self.Pos.y -= self.Velocity.y * fElapsedTime
 
         if self.MovingDown:
-            self.Rect.y += self.Velocity.y * fElapsedTime
+            self.Pos.y += self.Velocity.y * fElapsedTime
 
-        if self.Rect.left < self.ScreenRect.left:
-            self.Rect.left = self.ScreenRect.left
+        if self.Pos.x < self.ScreenRect.left:
+            self.Pos.x = self.ScreenRect.left
 
-        if self.Rect.right > self.ScreenRect.right:
-            self.Rect.right = self.ScreenRect.right
+        if self.Pos.x + self.Width > self.ScreenRect.right:
+            self.Pos.x = self.ScreenRect.right - self.Width
 
-        if self.Rect.top < self.ScreenRect.top:
-            self.Rect.top = self.ScreenRect.top
+        if self.Pos.y < self.ScreenRect.top:
+            self.Pos.y = self.ScreenRect.top
 
-        if self.Rect.bottom < self.ScreenRect.bottom:
-            self.Rect.bottom = self.ScreenRect.bottom
+        if self.Pos.y + self.Height > self.ScreenRect.bottom:
+            self.Pos.y = self.ScreenRect.bottom - self.Height
 
     def Draw(self):
-        self.Screen.fill(self.Color, self.Rect)
+        self.Screen.fill(self.Color, pygame.Rect(int(self.Pos.x), int(self.Pos.y), self.Width, self.Height))
 

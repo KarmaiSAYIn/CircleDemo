@@ -7,7 +7,6 @@ from DynamicObjects import DynamicObject
 from Vec2 import Vec2
 
 class Game:
-    @staticmethod #This is probably redundant; but I'm trying to avoid making an instance of Game.
     def __init__(self):
         pygame.init()
         self.Screen = pygame.display.set_mode((1200, 800))
@@ -22,28 +21,21 @@ class Game:
         )
 
         self.BackgroundIndex = 0
-        self.Rectangle = DynamicObject(pygame.Rect(0, 0, 100, 100), Vec2(200, 200), (255, 255, 255), self.Screen, self.ScreenRect)
+        self.Rectangle = DynamicObject(Vec2(0, 0), 100, 100, Vec2(1, 1), (255, 255, 255), self.Screen, self.ScreenRect)
 
-        self.fElapsedTime = time()
+        self.fStartingTime = time()
         while True:
-            self.fElapsedTime = time() - self.fElapsedTime
+            fOld = self.fStartingTime
+            self.fStartingTime = time()
+            self.fElapsedTime = self.fStartingTime - fOld
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_1:
-                        self.BackgroundIndex += 1
-
-                        if self.BackgroundIndex >= len(self.Backgrounds):
-                            self.BackgroundIndex = 0
-
-                    if event.key == pygame.K_2:
-                        self.BackgroundIndex -= 1
-
-                        if self.BackgroundIndex < 0:
-                            self.BackgroundIndex = len(self.Backgrounds) - 1
+                elif event.type == pygame.KEYDOWN:
+                    self.KeydownEvents(event)
+                elif event.type == pygame.KEYUP:
+                    self.KeyupEvents(event)
 
             self.Rectangle.Update(self.fElapsedTime)
 
@@ -51,4 +43,42 @@ class Game:
             self.Rectangle.Draw()
             pygame.display.flip()
 
-Game(Game)
+    def KeydownEvents(self, event):
+        if event.key == pygame.K_1:
+            self.BackgroundIndex += 1
+
+            if self.BackgroundIndex >= len(self.Backgrounds):
+                self.BackgroundIndex = 0
+
+        if event.key == pygame.K_2:
+            self.BackgroundIndex -= 1
+
+            if self.BackgroundIndex < 0:
+                self.BackgroundIndex = len(self.Backgrounds) - 1
+
+        if event.key == pygame.K_LEFT:
+            self.Rectangle.MovingLeft = True
+
+        if event.key == pygame.K_RIGHT:
+            self.Rectangle.MovingRight = True
+
+        if event.key == pygame.K_UP:
+            self.Rectangle.MovingUp = True
+
+        if event.key == pygame.K_DOWN:
+            self.Rectangle.MovingDown = True
+
+    def KeyupEvents(self, event):
+        if event.key == pygame.K_LEFT:
+            self.Rectangle.MovingLeft = False
+
+        if event.key == pygame.K_RIGHT:
+            self.Rectangle.MovingRight = False
+
+        if event.key == pygame.K_UP:
+            self.Rectangle.MovingUp = False
+
+        if event.key == pygame.K_DOWN:
+            self.Rectangle.MovingDown = False
+
+Game()
