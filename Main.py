@@ -21,7 +21,7 @@ class Game:
             (0, 0, 255),
         )
 
-        self.BackgroundIndex = 0;
+        self.BackgroundIndex = 0
         self.Rectangle = DynamicObject(pygame.Rect(0, 0, 100, 100), Vec2(200, 200), (255, 255, 255), self.Screen, self.ScreenRect)
 
         self.fElapsedTime = time()
