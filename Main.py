@@ -21,7 +21,7 @@ class Game:
         )
 
         self.BackgroundIndex = 0
-        self.Circle0 = Circle(Vec2(400, 400), 50, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
+        self.Circle0 = Circle(Vec2(400, 400), 200, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
         self.Circle1 = Circle(Vec2(600, 400), 50, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
 
         self.fStartingTime = time()
@@ -32,7 +32,7 @@ class Game:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    sys.exit()
+                    return
                 elif event.type == pygame.KEYDOWN:
                     self.KeydownEvents(event)
                 elif event.type == pygame.KEYUP:
@@ -89,4 +89,4 @@ class Game:
         if event.key == pygame.K_DOWN:
             self.Circle0.MovingDown = False
 
-game = Game()
+Game()

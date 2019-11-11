@@ -63,10 +63,21 @@ class Circle(DynamicObject):
         DistanceX = (OtherCircleCenter.x - CircleCenter.x) ** 2
         DistanceY = (OtherCircleCenter.y - CircleCenter.y) ** 2
 
-        if DistanceX + DistanceY < (self.Radius ** 2 + OtherCircle.Radius ** 2) * 2:
-            return True
-        else:
-            return False
+        return DistanceX + DistanceY < (OtherCircle.Radius + self.Radius) ** 2
 
     def Draw(self):
         pygame.draw.circle(self.Screen, self.Color, (int(self.Pos.x + self.Radius), int(self.Pos.y + self.Radius)), self.Radius, self.Radius)
+
+        """
+        #Here's what the pygame.draw.circle function does; the only reason I don't use this code is because
+        #it's slow as a result of the awful speed Python is known for, and pygame uses c++.
+
+        for y in range(self.Radius * 2):
+            y += self.Pos.y - self.Radius
+            for x in range(self.Radius * 2):
+                x += self.Pos.x - self.Radius
+
+                if (self.Pos.x - x) ** 2 + (self.Pos.y - y) ** 2 <= self.Radius ** 2:
+                    self.Screen.fill(self.Color, pygame.Rect(x, y, 1, 1))
+        """
+
