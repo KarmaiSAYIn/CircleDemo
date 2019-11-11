@@ -9,7 +9,7 @@ from Vec2 import Vec2
 class Game:
     def __init__(self):
         pygame.init()
-        self.Screen = pygame.display.set_mode((1200, 800))
+        self.Screen = pygame.display.set_mode((1200, 600))
         self.ScreenRect = self.Screen.get_rect()
         pygame.display.set_caption("School")
 
