@@ -21,7 +21,7 @@ class Game:
         )
 
         self.BackgroundIndex = 0
-        self.Circle0 = Circle(Vec2(400, 400), 200, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
+        self.Circle0 = Circle(Vec2(400, 400), 50, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
         self.Circle1 = Circle(Vec2(600, 400), 50, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
 
         self.fStartingTime = time()

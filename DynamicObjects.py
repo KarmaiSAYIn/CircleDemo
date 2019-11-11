@@ -63,7 +63,7 @@ class Circle(DynamicObject):
         DistanceX = (OtherCircleCenter.x - CircleCenter.x) ** 2
         DistanceY = (OtherCircleCenter.y - CircleCenter.y) ** 2
 
-        return DistanceX + DistanceY < (OtherCircle.Radius + self.Radius) ** 2
+        return DistanceX + DistanceY <= (OtherCircle.Radius + self.Radius) ** 2
 
     def Draw(self):
         pygame.draw.circle(self.Screen, self.Color, (int(self.Pos.x + self.Radius), int(self.Pos.y + self.Radius)), self.Radius, self.Radius)
