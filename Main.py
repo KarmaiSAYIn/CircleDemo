@@ -41,6 +41,10 @@ class Game:
                 elif event.type == pygame.KEYUP:
                     self.KeyupEvents(event)
 
+            for circle in self.Circles:
+                circle.Update(self.fElapsedTime)
+                circle.ClampToScreen()
+
             self.Screen.fill(self.Backgrounds[self.BackgroundIndex])
             [circle.Draw() for circle in self.Circles]
             pygame.display.flip()
