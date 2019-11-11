@@ -1,5 +1,6 @@
 import sys
 from time import time
+from random import randint
 
 import pygame
 
@@ -9,7 +10,7 @@ from Vec2 import Vec2
 class Game:
     def __init__(self):
         pygame.init()
-        self.Screen = pygame.display.set_mode((1200, 800))
+        self.Screen = pygame.display.set_mode((1200, 600))
         self.ScreenRect = self.Screen.get_rect()
         pygame.display.set_caption("School")
 
@@ -21,8 +22,10 @@ class Game:
         )
 
         self.BackgroundIndex = 0
-        self.Circle0 = Circle(Vec2(400, 400), 50, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
-        self.Circle1 = Circle(Vec2(600, 400), 50, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect)
+
+        self.Circles = []
+        for x in range(10):
+            self.Circles.append(Circle(Vec2(randint(0, self.ScreenRect.width), randint(0, self.ScreenRect.height)), randint(10, 50), Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect))
 
         self.fStartingTime = time()
         while True:
@@ -38,17 +41,12 @@ class Game:
                 elif event.type == pygame.KEYUP:
                     self.KeyupEvents(event)
 
-            self.Circle0.Update(self.fElapsedTime)
-            self.Circle0.ClampToScreen()
-
-            if self.Circle0.CheckCircleCollision(self.Circle1):
-                self.Circle0.Color = (255, 0, 0)
-            else:
-                self.Circle0.Color = (255, 255, 255)
+            for circle in self.Circles:
+                circle.Update(self.fElapsedTime)
+                circle.ClampToScreen()
 
             self.Screen.fill(self.Backgrounds[self.BackgroundIndex])
-            self.Circle1.Draw()
-            self.Circle0.Draw()
+            [circle.Draw() for circle in self.Circles]
             pygame.display.flip()
 
     def KeydownEvents(self, event):
@@ -65,28 +63,28 @@ class Game:
                 self.BackgroundIndex = len(self.Backgrounds) - 1
 
         if event.key == pygame.K_LEFT:
-            self.Circle0.MovingLeft = True
+            pass
 
         if event.key == pygame.K_RIGHT:
-            self.Circle0.MovingRight = True
+            pass
 
         if event.key == pygame.K_UP:
-            self.Circle0.MovingUp = True
+            pass
 
         if event.key == pygame.K_DOWN:
-            self.Circle0.MovingDown = True
+            pass
 
     def KeyupEvents(self, event):
         if event.key == pygame.K_LEFT:
-            self.Circle0.MovingLeft = False
+            pass
 
         if event.key == pygame.K_RIGHT:
-            self.Circle0.MovingRight = False
+            pass
 
         if event.key == pygame.K_UP:
-            self.Circle0.MovingUp = False
+            pass
 
         if event.key == pygame.K_DOWN:
-            self.Circle0.MovingDown = False
+            pass
 
 Game()

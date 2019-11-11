@@ -51,8 +51,8 @@ class Circle(DynamicObject):
     def __init__(self, InitPos, InitRadius, InitVelocity, InitColor, Screen, ScreenRect):
         self.Radius = InitRadius
         Diameter = self.Radius * 2
-        super().__init__(InitPos, Diameter, Diameter, InitVelocity, InitColor, Screen, ScreenRect)
-    
+        DynamicObject.__init__(self, InitPos, Diameter, Diameter, InitVelocity, InitColor, Screen, ScreenRect)
+
     def GetCenter(self):
         return Vec2(self.Pos.x + self.Radius, self.Pos.y + self.Radius)
 
