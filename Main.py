@@ -25,7 +25,7 @@ class Game:
 
         self.Circles = []
         for x in range(10):
-            self.Circles.append(Circle(Vec2(randint(0, self.ScreenRect.width), randint(0, self.ScreenRect.height)), 50, Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect))
+            self.Circles.append(Circle(Vec2(randint(0, self.ScreenRect.width), randint(0, self.ScreenRect.height)), randint(10, 50), Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect))
 
         self.fStartingTime = time()
         while True:
