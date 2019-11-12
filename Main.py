@@ -35,7 +35,7 @@ class Game:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return
+                    sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     self.KeydownEvents(event)
                 elif event.type == pygame.KEYUP:
@@ -50,6 +50,8 @@ class Game:
             pygame.display.flip()
 
     def KeydownEvents(self, event):
+        if event.key == pygame.K_ESCAPE:
+            sys.exit()
         if event.key == pygame.K_1:
             self.BackgroundIndex += 1
 
