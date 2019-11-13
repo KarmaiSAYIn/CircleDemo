@@ -1,4 +1,31 @@
+import numbers
+
 class Vec2:
     def __init__(self, InitX, InitY):
         self.x = InitX
         self.y = InitY
+
+    def __add__(self, OtherVec):
+        return Vec2(self.x + OtherVec.x, self.y + OtherVec.y)
+
+    def __sub__(self, OtherVec):
+        return Vec2(self.x - OtherVec.x, self.y - OtherVec.y)
+
+    def __mul__(self, Multiplier):
+        return Vec2(self.x * Multiplier, self.y * Multiplier)
+
+    def GetLengthSq(self):
+        return self.x ** 2 + self.y ** 2
+
+    def GetLength(self):
+        return numbers.sqrt(self.GetLengthSq())
+
+    def GetNormalized(self):
+        return self * (1 / self.GetLength())
+
+    def Normalize(self):
+        Normalized = self.GetNormalized()
+
+        self.x = Normalized.x
+        self.y = Normalized.y
+
