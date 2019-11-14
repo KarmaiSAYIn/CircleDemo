@@ -78,13 +78,7 @@ class Circle(DynamicObject):
         return Vec2(self.Pos.x + self.Radius, self.Pos.y + self.Radius)
 
     def CheckCircleCollision(self, OtherCircle):
-        CircleCenter = self.GetCenter()
-        OtherCircleCenter = OtherCircle.GetCenter()
-
-        DistanceX = (OtherCircleCenter.x - CircleCenter.x) ** 2
-        DistanceY = (OtherCircleCenter.y - CircleCenter.y) ** 2
-
-        return DistanceX + DistanceY <= (OtherCircle.Radius + self.Radius) ** 2
+        return (self.GetCenter() - OtherCircle.GetCenter()).GetLengthSq() <= (OtherCircle.Radius + self.Radius) ** 2
 
     def CollidePoint(self, Point):
         return (self.GetCenter() - Point).GetLengthSq() <= self.Radius ** 2
