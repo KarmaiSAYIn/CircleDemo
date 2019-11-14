@@ -103,5 +103,5 @@ class Circle(DynamicObject):
 
                 if (self.Pos.x - x) ** 2 + (self.Pos.y - y) ** 2 <= self.Radius ** 2:
                     self.Screen.set_at((x, y), self.Color)
-                    """
+        """
 
