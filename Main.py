@@ -22,9 +22,13 @@ class Game:
 
         self.BackgroundIndex = 0
 
+        # This will be hard-coded until the map creator is made:
+        self.Points = [(77, 552), (131, 170), (386, 270), (487, 83), (640, 321), (742, 529), (478, 481), (1108, 28), (1100, 251), (971, 412)]
+
+
         self.Circles = []
         for x in range(10):
-            self.Circles.append(Circle(Vec2(randint(0, self.ScreenRect.width), randint(0, self.ScreenRect.height)), randint(10, 50), Vec2(0, 0), 400, (255, 255, 255), self.Screen, self.ScreenRect))
+            self.Circles.append(Circle(Vec2(self.Points[x]), randint(10, 50), Vec2(0, 0), 400, (255, 255, 255), self.Screen, self.ScreenRect))
             self.Circles[-1].ClampToScreen()
 
         self.SelectedCircle = None
@@ -105,5 +109,8 @@ class Game:
                     else:
                         self.SelectedCircle = circle
                         self.SelectedCircle.Select()
+
+            self.Points.append(pygame.mouse.get_pos())
+            print(self.Points)
 
 Game()
