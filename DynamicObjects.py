@@ -70,9 +70,8 @@ class Circle(DynamicObject):
         self.Color = self.InitColor
 
     def Update(self, fElapsedTime, MousePos):
-        if self.Selected:
-            if not self.CollidePoint(MousePos):
-                self.Pos += (((self.Pos + Vec2(self.Radius, self.Radius)) - MousePos).GetNormalized() * -1) * self.Speed * fElapsedTime
+        if not self.CollidePoint(MousePos):
+            self.Pos += (((self.Pos + Vec2(self.Radius, self.Radius)) - MousePos).GetNormalized() * -1) * self.Speed * fElapsedTime
 
     def GetCenter(self):
         return Vec2(self.Pos.x + self.Radius, self.Pos.y + self.Radius)
