@@ -1,9 +1,14 @@
-import numbers
+import math
 
 class Vec2:
-    def __init__(self, InitX, InitY):
-        self.x = InitX
-        self.y = InitY
+    def __init__(self, InitX, InitY=None):
+        if InitY is None:
+            assert(type(InitX) == tuple)
+            self.x = InitX[0]
+            self.y = InitX[1]
+        else:
+            self.x = InitX
+            self.y = InitY
 
     def __add__(self, OtherVec):
         return Vec2(self.x + OtherVec.x, self.y + OtherVec.y)
@@ -18,7 +23,7 @@ class Vec2:
         return self.x ** 2 + self.y ** 2
 
     def GetLength(self):
-        return numbers.sqrt(self.GetLengthSq())
+        return math.sqrt(self.GetLengthSq())
 
     def GetNormalized(self):
         return self * (1 / self.GetLength())
