@@ -3,11 +3,12 @@ import pygame
 from Vec2 import Vec2
 
 class DynamicObject:
-    def __init__(self, InitPos, InitWidth, InitHeight, InitVelocity, InitColor, Screen, ScreenRect):
+    def __init__(self, InitPos, InitWidth, InitHeight, InitVelocity, InitSpeed, InitColor, Screen, ScreenRect):
         self.Pos = InitPos
+        self.Velocity = InitVelocity
+        self.Speed = InitSpeed
         self.Width = InitWidth
         self.Height = InitHeight
-        self.Velocity = InitVelocity
         self.Color = InitColor
         self.Screen = Screen
         self.ScreenRect = ScreenRect
@@ -48,10 +49,30 @@ class DynamicObject:
 
 
 class Circle(DynamicObject):
-    def __init__(self, InitPos, InitRadius, InitVelocity, InitColor, Screen, ScreenRect):
+    def __init__(self, InitPos, InitRadius, InitVelocity, InitSpeed, InitColor, Screen, ScreenRect):
         self.Radius = InitRadius
         Diameter = self.Radius * 2
-        DynamicObject.__init__(self, InitPos, Diameter, Diameter, InitVelocity, InitColor, Screen, ScreenRect)
+        DynamicObject.__init__(self, InitPos, Diameter, Diameter, InitVelocity, InitSpeed, InitColor, Screen, ScreenRect)
+        self.InitColor = InitColor
+        self.SelectedColor = (255, 0, 0)
+        self.CollisionColor = (0, 200, 150)
+
+        self.Selected = False
+
+    def Select(self):
+        self.Selected = True
+
+        self.Color = self.SelectedColor
+
+    def Deselect(self):
+        self.Selected = False
+
+        self.Color = self.InitColor
+
+    def Update(self, fElapsedTime, MousePos):
+        if self.Selected:
+            if not self.CollidePoint(MousePos):
+                self.Pos += (((self.Pos + Vec2(self.Radius, self.Radius)) - MousePos).GetNormalized() * -1) * self.Speed * fElapsedTime
 
     def GetCenter(self):
         return Vec2(self.Pos.x + self.Radius, self.Pos.y + self.Radius)
@@ -64,6 +85,9 @@ class Circle(DynamicObject):
         DistanceY = (OtherCircleCenter.y - CircleCenter.y) ** 2
 
         return DistanceX + DistanceY <= (OtherCircle.Radius + self.Radius) ** 2
+
+    def CollidePoint(self, Point):
+        return (self.GetCenter() - Point).GetLengthSq() <= self.Radius ** 2
 
     def Draw(self):
         pygame.draw.circle(self.Screen, self.Color, (int(self.Pos.x + self.Radius), int(self.Pos.y + self.Radius)), self.Radius, self.Radius)
