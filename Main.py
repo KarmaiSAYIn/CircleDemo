@@ -25,7 +25,10 @@ class Game:
 
         self.Circles = []
         for x in range(10):
-            self.Circles.append(Circle(Vec2(randint(0, self.ScreenRect.width), randint(0, self.ScreenRect.height)), randint(10, 50), Vec2(400, 400), (255, 255, 255), self.Screen, self.ScreenRect))
+            self.Circles.append(Circle(Vec2(randint(0, self.ScreenRect.width), randint(0, self.ScreenRect.height)), randint(10, 50), Vec2(0, 0), 400, (255, 255, 255), self.Screen, self.ScreenRect))
+            self.Circles[-1].ClampToScreen()
+
+        self.SelectedCircle = None
 
         self.fStartingTime = time()
         while True:
@@ -33,20 +36,44 @@ class Game:
             self.fStartingTime = time()
             self.fElapsedTime = self.fStartingTime - fOld
 
+            self.MousePos = Vec2(pygame.mouse.get_pos())
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
                 elif event.type == pygame.KEYDOWN:
                     self.KeydownEvents(event)
-                elif event.type == pygame.KEYUP:
-                    self.KeyupEvents(event)
+                elif event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+                    self.MouseEvents(event)
 
+            Collided = False
             for circle in self.Circles:
-                circle.Update(self.fElapsedTime)
-                circle.ClampToScreen()
+                if circle is not self.SelectedCircle and self.SelectedCircle is not None:
+                    if circle.CheckCircleCollision(self.SelectedCircle):
+                        self.SelectedCircle.Color = self.SelectedCircle.CollisionColor
+                        circle.Color = circle.CollisionColor
+                        Collided = True
+                    else:
+                        circle.Color = circle.InitColor
+
+            if self.SelectedCircle is not None:
+                self.SelectedCircle.Update(self.fElapsedTime, self.MousePos)
+                self.SelectedCircle.ClampToScreen()
+
+                if Collided:
+                    self.SelectedCircle.Color = self.SelectedCircle.CollisionColor
+                else:
+                    self.SelectedCircle.Color = self.SelectedCircle.SelectedColor
 
             self.Screen.fill(self.Backgrounds[self.BackgroundIndex])
-            [circle.Draw() for circle in self.Circles]
+
+            for circle in self.Circles:
+                if circle is not self.SelectedCircle or self.SelectedCircle is None:
+                    circle.Draw()
+
+            if self.SelectedCircle is not None:
+                self.SelectedCircle.Draw()
+
             pygame.display.flip()
 
     def KeydownEvents(self, event):
@@ -64,29 +91,21 @@ class Game:
             if self.BackgroundIndex < 0:
                 self.BackgroundIndex = len(self.Backgrounds) - 1
 
-        if event.key == pygame.K_LEFT:
-            pass
+    def MouseEvents(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            for circle in self.Circles:
+                if circle.CollidePoint(self.MousePos):
+                    if self.SelectedCircle is not None:
+                        self.SelectedCircle.Deselect()
+                        if circle is self.SelectedCircle:
+                            self.SelectedCircle.Deselect()
+                            self.SelectedCircle = None
+                        else:
+                            self.SelectedCircle = circle
+                            self.SelectedCircle.Select()
+                    else:
+                        self.SelectedCircle = circle
+                        self.SelectedCircle.Select()
 
-        if event.key == pygame.K_RIGHT:
-            pass
-
-        if event.key == pygame.K_UP:
-            pass
-
-        if event.key == pygame.K_DOWN:
-            pass
-
-    def KeyupEvents(self, event):
-        if event.key == pygame.K_LEFT:
-            pass
-
-        if event.key == pygame.K_RIGHT:
-            pass
-
-        if event.key == pygame.K_UP:
-            pass
-
-        if event.key == pygame.K_DOWN:
-            pass
 
 Game()
