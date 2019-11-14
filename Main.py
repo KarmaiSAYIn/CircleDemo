@@ -4,7 +4,7 @@ from random import randint
 
 import pygame
 
-from DynamicObjects import DynamicObject, Circle
+from DynamicObjects import Circle
 from Vec2 import Vec2
 
 class Game:
@@ -16,7 +16,6 @@ class Game:
 
         self.Backgrounds = (
             (0, 0, 0),
-            (255, 0, 0),
             (0, 255, 0),
             (0, 0, 255),
         )
@@ -106,6 +105,5 @@ class Game:
                     else:
                         self.SelectedCircle = circle
                         self.SelectedCircle.Select()
-
 
 Game()
