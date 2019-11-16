@@ -70,14 +70,21 @@ class Circle(DynamicObject):
         self.Color = self.InitColor
 
     def Update(self, fElapsedTime, MousePos):
-        if not self.CollidePoint(MousePos):
-            self.Pos += (((self.Pos + Vec2(self.Radius, self.Radius)) - MousePos).GetNormalized() * -1) * self.Speed * fElapsedTime
+        if self.Selected:
+            if not self.CollidePoint(MousePos):
+                self.Pos += (((self.Pos + Vec2(self.Radius, self.Radius)) - MousePos).GetNormalized() * -1) * self.Speed * fElapsedTime
 
     def GetCenter(self):
         return Vec2(self.Pos.x + self.Radius, self.Pos.y + self.Radius)
 
     def CheckCircleCollision(self, OtherCircle):
-        return (self.GetCenter() - OtherCircle.GetCenter()).GetLengthSq() <= (OtherCircle.Radius + self.Radius) ** 2
+        CircleCenter = self.GetCenter()
+        OtherCircleCenter = OtherCircle.GetCenter()
+
+        DistanceX = (OtherCircleCenter.x - CircleCenter.x) ** 2
+        DistanceY = (OtherCircleCenter.y - CircleCenter.y) ** 2
+
+        return DistanceX + DistanceY <= (OtherCircle.Radius + self.Radius) ** 2
 
     def CollidePoint(self, Point):
         return (self.GetCenter() - Point).GetLengthSq() <= self.Radius ** 2

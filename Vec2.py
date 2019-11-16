@@ -34,3 +34,10 @@ class Vec2:
         self.x = Normalized.x
         self.y = Normalized.y
 
+    def MirrorX(self):
+        self.x *= -1
+
+    def MirrirY(self):
+        self.y *= -1
+
+
