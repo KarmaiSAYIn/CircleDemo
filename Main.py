@@ -14,6 +14,8 @@ class Game:
         self.ScreenRect = self.Screen.get_rect()
         pygame.display.set_caption("School")
 
+        self.Font = pygame.sysfont.SysFont(None, 48)
+
         self.Backgrounds = (
             (0, 0, 0),
             (0, 255, 0),
@@ -23,7 +25,7 @@ class Game:
         self.BackgroundIndex = 0
 
         # This will be hard-coded until the map creator is made:
-        self.Points = [(77, 552), (131, 170), (386, 270), (487, 83), (640, 321), (742, 529), (478, 481), (1108, 28), (1100, 251), (971, 412)]
+        self.Points = ((77, 552), (131, 170), (386, 270), (487, 83), (640, 321), (742, 529), (478, 481), (1108, 28), (1100, 251), (971, 412))
 
 
         self.Circles = []
@@ -34,10 +36,21 @@ class Game:
         self.SelectedCircle = None
 
         self.fStartingTime = time()
+
+        fFrameElapsedCounter = 0
+        nFrameCounter = 0
+        self.FPS = 0
         while True:
             fOld = self.fStartingTime
             self.fStartingTime = time()
             self.fElapsedTime = self.fStartingTime - fOld
+            fFrameElapsedCounter += self.fElapsedTime
+            nFrameCounter += 1
+
+            try:
+                self.FPS = round(1 / self.fElapsedTime)
+            except ZeroDivisionError:
+                self.FPS = self.FPS
 
             self.MousePos = Vec2(pygame.mouse.get_pos())
 
@@ -77,6 +90,7 @@ class Game:
             if self.SelectedCircle is not None:
                 self.SelectedCircle.Draw()
 
+            self.Screen.blit(pygame.font.Font.render(self.Font, str(self.FPS), True, (255, 255, 255)), (0, 0))
             pygame.display.flip()
 
     def KeydownEvents(self, event):
@@ -109,8 +123,5 @@ class Game:
                     else:
                         self.SelectedCircle = circle
                         self.SelectedCircle.Select()
-
-            self.Points.append(pygame.mouse.get_pos())
-            print(self.Points)
 
 Game()
