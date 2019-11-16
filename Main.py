@@ -37,20 +37,19 @@ class Game:
 
         self.fStartingTime = time()
 
-        fFrameElapsedCounter = 0
         nFrameCounter = 0
         self.FPS = 0
         while True:
             fOld = self.fStartingTime
             self.fStartingTime = time()
             self.fElapsedTime = self.fStartingTime - fOld
-            fFrameElapsedCounter += self.fElapsedTime
             nFrameCounter += 1
 
-            try:
-                self.FPS = round(1 / self.fElapsedTime)
-            except ZeroDivisionError:
-                self.FPS = self.FPS
+            if nFrameCounter % 10 == 0:
+                try:
+                    self.FPS = round(1 / self.fElapsedTime)
+                except ZeroDivisionError:
+                    self.FPS = self.FPS
 
             self.MousePos = Vec2(pygame.mouse.get_pos())
 
