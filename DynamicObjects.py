@@ -90,6 +90,15 @@ class Circle(DynamicObject):
     def CheckCircleCollision(self, OtherCircle):
         return (self.Pos - OtherCircle.Pos).GetLengthSq() <= (OtherCircle.Radius + self.Radius) ** 2
 
+    def CheckObstacleCollision(self, Obstacle):
+        if self.Pos.x + self.Radius <= Obstacle.left:
+            DistanceSq = (Obstacle.Pos - self.Pos).GetLengthSq()
+
+            if DistanceSq <= self.Radius ** 2:
+                return True
+
+        return False
+
     def CollidePoint(self, Point):
         return (self.Pos - Point).GetLengthSq() <= self.Radius ** 2
 
@@ -106,6 +115,6 @@ class Circle(DynamicObject):
                 x += self.Pos.x - self.Radius
 
                 if (self.Pos.x - x) ** 2 + (self.Pos.y - y) ** 2 <= self.Radius ** 2:
-                    self.Screen.set_at((x, y), self.Color)
+                    self.Screen.set_at((int(x), int(y)), self.Color)
         """
 

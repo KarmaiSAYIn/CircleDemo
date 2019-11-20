@@ -109,14 +109,17 @@ class Game:
 
     def MouseEvents(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
+
+            CursorCollisionHappend = False
             for circle in self.Circles:
                 if circle.CollidePoint(self.MousePos):
+                    CursorCollisionHappend = True
                     if self.SelectedCircle is not None:
                         self.SelectedCircle.Deselect()
+
                         if circle is self.SelectedCircle:
-                            self.SelectedCircle.Deselect()
                             self.SelectedCircle = None
-                        else:
+                        elif not CursorCollisionHappend:
                             self.SelectedCircle = circle
                             self.SelectedCircle.Select()
                     else:
