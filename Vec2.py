@@ -22,6 +22,9 @@ class Vec2:
     def GetTuple(self):
         return tuple((self.x, self.y))
 
+    def GetIntTuple(self):
+        return tuple((int(self.x), int(self.y)))
+
     def GetLengthSq(self):
         return self.x ** 2 + self.y ** 2
 
