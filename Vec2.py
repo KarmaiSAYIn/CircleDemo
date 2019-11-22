@@ -19,6 +19,9 @@ class Vec2:
     def __mul__(self, Multiplier):
         return Vec2(self.x * Multiplier, self.y * Multiplier)
 
+    def GetTuple(self):
+        return tuple((self.x, self.y))
+
     def GetLengthSq(self):
         return self.x ** 2 + self.y ** 2
 
@@ -37,7 +40,6 @@ class Vec2:
     def MirrorX(self):
         self.x *= -1
 
-    def MirrirY(self):
+    def MirrorY(self):
         self.y *= -1
-
 
