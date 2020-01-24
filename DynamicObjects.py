@@ -2,7 +2,7 @@ import pygame
 
 from Vec2 import Vec2
 
-class DynamicObject:
+class cDynamicShape:
     def __init__(self, InitPos, InitWidth, InitHeight, InitVelocity, InitSpeed, InitColor, Screen, ScreenRect):
         self.Pos = InitPos
         self.Velocity = InitVelocity
@@ -13,46 +13,35 @@ class DynamicObject:
         self.Screen = Screen
         self.ScreenRect = ScreenRect
 
-        self.MovingLeft = False
-        self.MovingRight = False
-        self.MovingUp = False
-        self.MovingDown = False
+    def Select(self):
+        pass
 
-    def Update(self, fElapsedTime):
-        if self.MovingLeft:
-            self.Pos.x -= self.Velocity.x * fElapsedTime
+    def Deselect(self):
+        pass
 
-        if self.MovingRight:
-            self.Pos.x += self.Velocity.x * fElapsedTime
-
-        if self.MovingUp:
-            self.Pos.y -= self.Velocity.y * fElapsedTime
-
-        if self.MovingDown:
-            self.Pos.y += self.Velocity.y * fElapsedTime
+    def Update(self, fElapsedTime, MousePos):
+        if self.Selected:
+            if not self.CollidePoint(MousePos):
+                self.Pos += ((self.Pos - MousePos).GetNormalized() * -1) * self.Speed * fElapsedTime
 
     def ClampToScreen(self):
-        if self.Pos.x < self.ScreenRect.left:
-            self.Pos.x = self.ScreenRect.left
+        pass
 
-        if self.Pos.x + self.Width > self.ScreenRect.right:
-            self.Pos.x = self.ScreenRect.right - self.Width
+    def CollidePoint(self, Point):
+        pass
 
-        if self.Pos.y < self.ScreenRect.top:
-            self.Pos.y = self.ScreenRect.top
-
-        if self.Pos.y + self.Height > self.ScreenRect.bottom:
-            self.Pos.y = self.ScreenRect.bottom - self.Height
+    def CheckCollision(self, other):
+        pass
 
     def Draw(self):
-        self.Screen.fill(self.Color, pygame.Rect(int(self.Pos.x), int(self.Pos.y), self.Width, self.Height))
+        pass
 
 
-class Circle(DynamicObject):
+class cCircle(cDynamicShape):
     def __init__(self, InitPos, InitRadius, InitVelocity, InitSpeed, InitColor, Screen, ScreenRect):
         self.Radius = InitRadius
         Diameter = self.Radius * 2
-        DynamicObject.__init__(self, InitPos - Vec2(self.Radius, self.Radius), Diameter, Diameter, InitVelocity, InitSpeed, InitColor, Screen, ScreenRect)
+        cDynamicShape.__init__(self, InitPos - Vec2(self.Radius, self.Radius), Diameter, Diameter, InitVelocity, InitSpeed, InitColor, Screen, ScreenRect)
         self.InitColor = InitColor
         self.SelectedColor = (255, 0, 0)
         self.CollisionColor = (0, 200, 150)
@@ -69,11 +58,6 @@ class Circle(DynamicObject):
 
         self.Color = self.InitColor
 
-    def Update(self, fElapsedTime, MousePos):
-        if self.Selected:
-            if not self.CollidePoint(MousePos):
-                self.Pos += ((self.Pos - MousePos).GetNormalized() * -1) * self.Speed * fElapsedTime
-
     def ClampToScreen(self):
         if self.Pos.x - self.Radius < self.ScreenRect.left:
             self.Pos.x = self.Radius
@@ -87,17 +71,8 @@ class Circle(DynamicObject):
         if self.Pos.y + self.Radius > self.ScreenRect.bottom:
             self.Pos.y = self.ScreenRect.bottom - self.Radius
 
-    def CheckCircleCollision(self, OtherCircle):
+    def CheckCollision(self, OtherCircle):
         return (self.Pos - OtherCircle.Pos).GetLengthSq() <= (OtherCircle.Radius + self.Radius) ** 2
-
-    def CheckObstacleCollision(self, Obstacle):
-        if self.Pos.x + self.Radius <= Obstacle.left:
-            DistanceSq = (Obstacle.Pos - self.Pos).GetLengthSq()
-
-            if DistanceSq <= self.Radius ** 2:
-                return True
-
-        return False
 
     def CollidePoint(self, Point):
         return (self.Pos - Point).GetLengthSq() <= self.Radius ** 2
@@ -117,4 +92,28 @@ class Circle(DynamicObject):
                 if (self.Pos.x - x) ** 2 + (self.Pos.y - y) ** 2 <= self.Radius ** 2:
                     self.Screen.set_at((int(x), int(y)), self.Color)
         """
+
+
+class cRectangle(cDynamicShape):
+    def __init__(self, InitPos, InitWidth, InitHeight, InitVelocity, InitSpeed, InitColor, Screen, ScreenRect):
+        cDynamicShape.__init__(self, InitPos, InitWidth, InitHeight, InitVelocity, InitSpeed, InitColor, Screen, ScreenRect)
+        self.Rect = pygame.Rect(InitPos.x, InitPos.y, InitWidth, InitHeight)
+
+    def Select(self):
+        pass
+
+    def Deselect(self):
+        pass
+
+    def ClampToScreen(self):
+        pass
+
+    def CheckCollision(self, other):
+        pass
+
+    def CollidePoint(self, Point):
+        pass
+
+    def Draw(self):
+        pygame.draw.rect(self.Screen, self.Color, self.Rect)
 

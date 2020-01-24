@@ -4,7 +4,7 @@ from random import randint
 
 import pygame
 
-from DynamicObjects import Circle
+from DynamicObjects import cCircle, cRectangle
 from Vec2 import Vec2
 
 class Game:
@@ -27,13 +27,12 @@ class Game:
         # This will be hard-coded until the map creator is made:
         self.Points = ((77, 552), (131, 170), (386, 270), (487, 83), (640, 321), (742, 529), (478, 481), (1108, 28), (1100, 251), (971, 412))
 
-
-        self.Circles = []
+        self.Shapes = []
         for x in range(10):
-            self.Circles.append(Circle(Vec2(self.Points[x]), randint(10, 50), Vec2(0, 0), 400, (255, 255, 255), self.Screen, self.ScreenRect))
-            self.Circles[-1].ClampToScreen()
+            self.Shapes.append(cCircle(Vec2(self.Points[x]), randint(10, 50), Vec2(0, 0), 400, (255, 255, 255), self.Screen, self.ScreenRect))
+            self.Shapes[-1].ClampToScreen()
 
-        self.SelectedCircle = None
+        self.SelectedShape = None
 
         self.fStartingTime = time()
 
@@ -62,32 +61,33 @@ class Game:
                     self.MouseEvents(event)
 
             Collided = False
-            for circle in self.Circles:
-                if circle is not self.SelectedCircle and self.SelectedCircle is not None:
-                    if circle.CheckCircleCollision(self.SelectedCircle):
-                        self.SelectedCircle.Color = self.SelectedCircle.CollisionColor
-                        circle.Color = circle.CollisionColor
+            for shape in self.Shapes:
+                if shape is not self.SelectedShape and self.SelectedShape is not None:
+                    if shape.CheckCollision(self.SelectedShape):
+
+                        self.SelectedShape.Color = self.SelectedShape.CollisionColor
+                        shape.Color = shape.CollisionColor
                         Collided = True
                     else:
-                        circle.Color = circle.InitColor
+                        shape.Color = shape.InitColor
 
-            if self.SelectedCircle is not None:
-                self.SelectedCircle.Update(self.fElapsedTime, self.MousePos)
-                self.SelectedCircle.ClampToScreen()
+            if self.SelectedShape is not None:
+                self.SelectedShape.Update(self.fElapsedTime, self.MousePos)
+                self.SelectedShape.ClampToScreen()
 
                 if Collided:
-                    self.SelectedCircle.Color = self.SelectedCircle.CollisionColor
+                    self.SelectedShape.Color = self.SelectedShape.CollisionColor
                 else:
-                    self.SelectedCircle.Color = self.SelectedCircle.SelectedColor
+                    self.SelectedShape.Color = self.SelectedShape.SelectedColor
 
             self.Screen.fill(self.Backgrounds[self.BackgroundIndex])
 
-            for circle in self.Circles:
-                if circle is not self.SelectedCircle or self.SelectedCircle is None:
-                    circle.Draw()
+            for shape in self.Shapes:
+                if shape is not self.SelectedShape or self.SelectedShape is None:
+                    shape.Draw()
 
-            if self.SelectedCircle is not None:
-                self.SelectedCircle.Draw()
+            if self.SelectedShape is not None:
+                self.SelectedShape.Draw()
 
             self.Screen.blit(pygame.font.Font.render(self.Font, str(self.FPS), True, (255, 255, 255)), (0, 0))
             pygame.display.flip()
@@ -111,19 +111,19 @@ class Game:
         if event.type == pygame.MOUSEBUTTONDOWN:
 
             CursorCollisionHappend = False
-            for circle in self.Circles:
-                if circle.CollidePoint(self.MousePos):
+            for shape in self.Shapes:
+                if shape.CollidePoint(self.MousePos):
                     CursorCollisionHappend = True
-                    if self.SelectedCircle is not None:
-                        self.SelectedCircle.Deselect()
+                    if self.SelectedShape is not None:
+                        self.SelectedShape.Deselect()
 
-                        if circle is self.SelectedCircle:
-                            self.SelectedCircle = None
+                        if shape is self.SelectedShape:
+                            self.SelectedShape = None
                         elif not CursorCollisionHappend:
-                            self.SelectedCircle = circle
-                            self.SelectedCircle.Select()
+                            self.SelectedShape = shape
+                            self.SelectedShape.Select()
                     else:
-                        self.SelectedCircle = circle
-                        self.SelectedCircle.Select()
+                        self.SelectedShape = shape
+                        self.SelectedShape.Select()
 
 Game()
